@@ -86,7 +86,10 @@ namespace
             float freq = static_cast<float>(getValue(cpu));
             freq /= 1000000;
             ss << std::fixed << std::setprecision(2) << freq;
-            ss << separator();
+            if(i != 3)
+            {
+                ss << separator();
+            }
         }
 
         return ss.str();
