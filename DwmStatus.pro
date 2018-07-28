@@ -5,12 +5,15 @@ CONFIG -= qt
 
 SOURCES += \
         main.cpp \
-#    ../dwmstatus/profil-dwmstatus-1.0.c \
+    ../dwmstatus/profil-dwmstatus-1.0.c \
 #    ../dwmstatus/dwmstatus.c
-    Display.cpp
+    Display.cpp \
+    DwmStatus.cpp
 
 LIBS += \
         -lX11
 
 HEADERS += \
-    Display.h
+    Display.h \
+    DwmStatus.h \
+    Exceptions.h
