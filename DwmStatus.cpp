@@ -55,6 +55,10 @@ namespace
 
     const char * percent_bar(int p)
     {
+        if(p == -1)
+        {
+            return "/";
+        }
         const char *s[] = {
             "▁", "▂", "▃", "▄", "▅", "▆", "▇"
         };
@@ -68,18 +72,29 @@ namespace
         return batteryLevel;
     }
 
+    char openSeparator() noexcept
+    {
+        return '[';
+    }
+
+    char closeSeparator() noexcept
+    {
+        return ']';
+    }
+
     std::string separator() noexcept
     {
-        return "|";
+        return "·";
     }
 
     std::string getCpuInfo()
     {
-        int concurentThreadsSupported = std::thread::hardware_concurrency();
+        const int concurentThreadsSupported = std::thread::hardware_concurrency();
         const int pos = 27;
         std::string cpu{"/sys/devices/system/cpu/cpuN/cpufreq/scaling_cur_freq"};
         std::stringstream ss;
 
+        ss << openSeparator();
         for(int i = 0; i < concurentThreadsSupported; ++i)
         {
             cpu.replace(pos, 1, std::to_string(i));
@@ -91,6 +106,7 @@ namespace
                 ss << separator();
             }
         }
+        ss << closeSeparator();
 
         return ss.str();
     }
@@ -106,8 +122,8 @@ void dwmst::DwnStatus::run()
 {
     while(true)
     {
-        const std::string dateTime = currentDateTime();
-        const std::string batteryLevel = " |" + getBatteryLevel() + "| ";
+        const std::string dateTime = openSeparator() + currentDateTime() + closeSeparator();
+        const std::string batteryLevel = openSeparator() + getBatteryLevel() + closeSeparator();
         const std::string cpus = getCpuInfo();
         const std::string status = cpus + batteryLevel + dateTime;
         display_.setStatus(status.c_str());
