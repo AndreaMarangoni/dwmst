@@ -109,9 +109,9 @@ void dwmst::DwnStatus::run()
     while(true)
     {
         const std::string dateTime = currentDateTime();
-        const std::string batteryLevel = getBatteryLevel();
+        const std::string batteryLevel = " |" + getBatteryLevel() + "| ";
         const std::string cpus = getCpuInfo();
-        const std::string status = cpus + " |" + batteryLevel + "| " + dateTime;
+        const std::string status = cpus + batteryLevel + dateTime;
         display_.setStatus(status.c_str());
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
