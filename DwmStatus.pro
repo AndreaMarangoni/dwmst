@@ -5,7 +5,7 @@ CONFIG -= qt
 
 SOURCES += \
         main.cpp \
-    ../dwmstatus/profil-dwmstatus-1.0.c \
+#    ../dwmstatus/profil-dwmstatus-1.0.c \
 #    ../dwmstatus/dwmstatus.c
     Display.cpp \
     DwmStatus.cpp
