@@ -75,24 +75,19 @@ namespace
 
     std::string getCpuInfo()
     {
-        static const std::string cpu0{"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"};
-        static const std::string cpu1{"/sys/devices/system/cpu/cpu1/cpufreq/scaling_cur_freq"};
-        static const std::string cpu2{"/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq"};
-        static const std::string cpu3{"/sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq"};
-
-        int freq0 = getValue(cpu0);
-        int freq1 = getValue(cpu1);
-        int freq2 = getValue(cpu2);
-        int freq3 = getValue(cpu3);
-
+        int concurentThreadsSupported = std::thread::hardware_concurrency();
+        const int pos = 27;
+        std::string cpu{"/sys/devices/system/cpu/cpuN/cpufreq/scaling_cur_freq"};
         std::stringstream ss;
-        ss << std::fixed << std::setprecision(2) << static_cast<float>(freq0)/1000000;
-        ss << separator();
-        ss << std::fixed << std::setprecision(2) << static_cast<float>(freq1)/1000000;
-        ss << separator();
-        ss << std::fixed << std::setprecision(2) << static_cast<float>(freq2)/1000000;
-        ss << separator();
-        ss << std::fixed << std::setprecision(2) << static_cast<float>(freq3)/1000000;
+
+        for(int i = 0; i < concurentThreadsSupported; ++i)
+        {
+            cpu.replace(pos, 1, std::to_string(i));
+            float freq = static_cast<float>(getValue(cpu));
+            freq /= 1000000;
+            ss << std::fixed << std::setprecision(2) << freq;
+            ss << separator();
+        }
 
         return ss.str();
     }
