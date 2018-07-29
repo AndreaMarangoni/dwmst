@@ -11,7 +11,7 @@ struct Cpu
 
 private:
     int number_;
-    mutable int maxScaling_;
+    int maxScaling_;
     mutable int minScaling_;
 };
 

@@ -44,10 +44,6 @@ float dwmst::Cpu::scalingFrequencyPercent() const
     {
         minScaling_ = currentFrequency;
     }
-    if(currentFrequency > maxScaling_)
-    {
-        maxScaling_ = currentFrequency;
-    }
     float frequency = static_cast<float>(currentFrequency);
     frequency = ((frequency - minScaling_) * 100) / (maxScaling_ - minScaling_);
     return frequency;
