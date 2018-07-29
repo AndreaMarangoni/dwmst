@@ -45,7 +45,8 @@ namespace
         {
             return "/";
         }
-        const char *s[] = {
+        static const char *s[] =
+        {
             "▁", "▂", "▃", "▄", "▅", "▆", "▇"
         };
         return s[(p * 6) / 100];
@@ -89,7 +90,7 @@ dwmst::DwnStatus::DwnStatus(dwmst::Display &display) :
 {
 }
 
-void dwmst::DwnStatus::run()
+void dwmst::DwnStatus::run() noexcept
 {
     while(true)
     {

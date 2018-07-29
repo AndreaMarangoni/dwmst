@@ -1,7 +1,7 @@
 name=dwmst
 
 LDFLAGS = -L/usr/lib -lX11
-options = -g -Wall -Wextra -pedantic -std=c++14
+options = -Wall -Wextra -pedantic -std=c++14
 
 sources=$(wildcard *.cpp )
 

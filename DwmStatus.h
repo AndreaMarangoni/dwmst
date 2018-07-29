@@ -18,7 +18,7 @@ struct DwnStatus
 
     DwnStatus(Display & display);
 
-    void run();
+    void run() noexcept;
 
 private:
     Display & display_;
