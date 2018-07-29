@@ -3,11 +3,6 @@
 #include "Display.h"
 #include "DwmStatus.h"
 
-namespace dwmst
-{
-}
-
-
 int main()
 {
     dwmst::Display display;
