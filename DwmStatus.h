@@ -2,6 +2,7 @@
 #define DWMSTATUS_H
 
 #include <string>
+#include <limits>
 
 namespace dwmst
 {
@@ -16,6 +17,8 @@ struct DwnStatus
 
 private:
     Display & display_;
+    float max_;
+    float min_;
 };
 
 }

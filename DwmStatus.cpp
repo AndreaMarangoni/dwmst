@@ -87,24 +87,30 @@ namespace
         return "·";
     }
 
-    std::string getCpuInfo()
+    std::string getCpuInfo(float min, float max)
     {
         const int concurentThreadsSupported = std::thread::hardware_concurrency();
         const int pos = 27;
         std::string cpu{"/sys/devices/system/cpu/cpuN/cpufreq/scaling_cur_freq"};
         std::stringstream ss;
 
+
         ss << openSeparator();
         for(int i = 0; i < concurentThreadsSupported; ++i)
         {
             cpu.replace(pos, 1, std::to_string(i));
-            float freq = static_cast<float>(getValue(cpu));
-            freq /= 1000000;
-            ss << std::fixed << std::setprecision(2) << freq;
-            if(i != 3)
+            int val = getValue(cpu);
+            if(val < min)
             {
-                ss << separator();
+                min = val;
             }
+            else if(val > max)
+            {
+                max = val;
+            }
+            float freq = static_cast<float>(val);
+            freq = ((freq - min) * 100) / (max - min);
+            ss << std::fixed << std::setprecision(1) << freq << '%' << " ";
         }
         ss << closeSeparator();
 
@@ -116,6 +122,10 @@ namespace
 dwmst::DwnStatus::DwnStatus(dwmst::Display &display) :
     display_(display)
 {
+    const std::string max{"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq"};
+    const std::string min{"/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq"};
+    min_ = getValue(min);
+    max_ = getValue(max);
 }
 
 void dwmst::DwnStatus::run()
@@ -124,9 +134,9 @@ void dwmst::DwnStatus::run()
     {
         const std::string dateTime = openSeparator() + currentDateTime() + closeSeparator();
         const std::string batteryLevel = openSeparator() + getBatteryLevel() + closeSeparator();
-        const std::string cpus = getCpuInfo();
+        const std::string cpus = getCpuInfo( min_, max_);
         const std::string status = cpus + batteryLevel + dateTime;
         display_.setStatus(status.c_str());
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }
