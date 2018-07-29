@@ -1,37 +1,22 @@
 #include "DwmStatus.h"
-
 #include <iostream>
-#include <thread>
 #include <sstream>
 #include <iomanip>
-#include <fstream>
 
 #include "Display.h"
-#include "Exceptions.h"
 #include "Cpu.h"
+#include "Utils.h"
 
 namespace
 {
     std::string currentDateTime() noexcept
     {
-        auto now = std::chrono::system_clock::now();
-        auto time = std::chrono::system_clock::to_time_t(now);
+        const auto now = std::chrono::system_clock::now();
+        const auto time = std::chrono::system_clock::to_time_t(now);
 
         std::stringstream ss;
         ss << std::put_time(std::localtime(&time), "%a %d %b %T %Z %Y");
         return ss.str();
-    }
-
-    int getValue(const std::string & filename)
-    {
-        int value = 0;
-        std::ifstream file{filename, std::ios::in};
-        if(!file.is_open())
-        {
-            throw dwmst::UnableToOpenFile(filename);
-        }
-        file >> value;
-        return value;
     }
 
     int getBattery()
@@ -42,9 +27,9 @@ namespace
 
         try
         {
-            int charge_now = getValue(chargeNowFilename);
-            int charge_full = getValue(chargeFullFilename);
-            int voltage_now = getValue(voltageFilename);
+            const int charge_now = dwmst::getValueFromFile(chargeNowFilename);
+            const int charge_full = dwmst::getValueFromFile(chargeFullFilename);
+            const int voltage_now = dwmst::getValueFromFile(voltageFilename);
             return ((float)charge_now * 1000 / (float)voltage_now) * 100 / ((float)charge_full * 1000 / (float)voltage_now);
         }
         catch(dwmst::UnableToOpenFile & ex)
