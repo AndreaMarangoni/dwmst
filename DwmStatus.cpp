@@ -90,7 +90,7 @@ dwmst::DwnStatus::DwnStatus(dwmst::Display &display) :
     cpus_()
 {
     cpus_.reserve(cpusAvailable_);
-    for(unsigned i=0; i < cpusAvailable_; ++i)
+    for(int i=0; i < cpusAvailable_; ++i)
     {
         cpus_.emplace_back(Cpu(i));
     }
