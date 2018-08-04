@@ -73,7 +73,7 @@ namespace
     {
         std::stringstream ss;
         ss << openSeparator();
-        for(int i = 0; i < 4; ++i)
+        for(unsigned i = 0; i < cpus.size(); ++i)
         {
             const dwmst::Cpu & cpu = cpus[i];
             const float freq = cpu.scalingFrequencyPercent();
@@ -86,8 +86,14 @@ namespace
 }
 
 dwmst::DwnStatus::DwnStatus(dwmst::Display &display) :
-    display_(display)
+    display_(display),
+    cpus_()
 {
+    cpus_.reserve(cpusAvailable_);
+    for(unsigned i=0; i < cpusAvailable_; ++i)
+    {
+        cpus_.emplace_back(Cpu(i));
+    }
 }
 
 void dwmst::DwnStatus::run() noexcept
@@ -99,6 +105,6 @@ void dwmst::DwnStatus::run() noexcept
         const std::string cpus = getCpuInfo(cpus_);
         const std::string status = cpus + batteryLevel + dateTime;
         display_.setStatus(status.c_str());
-        std::this_thread::sleep_for(std::chrono::milliseconds(800));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }

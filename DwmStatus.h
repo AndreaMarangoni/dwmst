@@ -4,6 +4,7 @@
 #include <string>
 #include <limits>
 #include <thread>
+#include <vector>
 
 #include "Cpu.h"
 
@@ -14,7 +15,7 @@ class Display;
 
 struct DwnStatus
 {
-    using Cpus = std::array<Cpu, 4>;
+    using Cpus = std::vector<Cpu>;
 
     DwnStatus(Display & display);
 
@@ -23,7 +24,7 @@ struct DwnStatus
 private:
     Display & display_;
     const int cpusAvailable_ = std::thread::hardware_concurrency();
-    Cpus cpus_ = { Cpu(0), Cpu(1), Cpu(2), Cpu(3)};
+    Cpus cpus_;
 };
 
 }
